@@ -1,0 +1,52 @@
+﻿<%@ Master Language="VB" CodeFile="MasterPage.master.vb" Inherits="MasterPage" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style type="text/css">
+        .auto-style1 {
+            height: 30px;
+        }
+
+        .auto-style2 {
+            border-style: solid;
+            background-color: #CCCCFF;
+        }
+
+        .auto-style3 {
+            border-style: solid;
+            height: 30px;
+            background-color: #CCCCFF;
+        }
+
+        .auto-style4 {
+            border-style: solid;
+            background-color: #CCCCFF;
+            height: 48px;
+        }
+        .botones_abajo{
+            margin-right: 20px;
+            margin-left: 20px;
+        }
+    </style>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
+            <asp:ImageButton ID="ImageButton1" runat="server" ImageUrl="~/Images/pajarito.jpg" CausesValidation="false"/>
+            <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="false">Nueva página</asp:LinkButton>
+            <asp:Button ID="Button1" runat="server" Text="Formulario" CausesValidation="false"/>
+            <br />
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+            
+        </div>
+    </form>
+</body>
+</html>
