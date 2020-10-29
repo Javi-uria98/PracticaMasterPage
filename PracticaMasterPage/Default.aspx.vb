@@ -1,5 +1,6 @@
 ﻿Imports System.Data
 Imports System.IO
+Imports System.Data.SqlClient
 
 Partial Class _Default
     Inherits System.Web.UI.Page
@@ -58,6 +59,27 @@ Partial Class _Default
 
 
     Protected Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+
+        Try
+            Using connection As New SqlConnection("Data Source=DESKTOP-KK3SAOI;Initial Catalog=ejercicios;User ID=ejercicios;Password=Becario2020")
+                Dim insertStatement As String = "INSERT INTO tabla_formularios (Nombre, Apellidos, Dni, Telefono, Comunidad, Email)" _
+         & "Values( @Nombre, @Apellidos, @Dni, @Telefono, @Comunidad, @Email) "
+                Using insertcommand As New SqlCommand(insertStatement, connection)
+                    connection.Open()
+                    insertcommand.Parameters.AddWithValue("@Nombre", txt_nombre.Text)
+                    insertcommand.Parameters.AddWithValue("@Apellidos", txt_apellidos.Text)
+                    insertcommand.Parameters.AddWithValue("@Dni", txt_dni.Text & lb_letra.Text)
+                    insertcommand.Parameters.AddWithValue("@Telefono", txt_telefono.Text)
+                    insertcommand.Parameters.AddWithValue("@Comunidad", lista_comunidades.SelectedValue.ToString)
+                    insertcommand.Parameters.AddWithValue("@Email", txt_email.Text)
+                    insertcommand.ExecuteNonQuery()
+                End Using
+            End Using
+
+        Catch ex As Exception
+            MsgBox("Error mientras se insertaba valores en la tabla..." & ex.Message)
+        End Try
+
         calcularLetraDni(CType(txt_dni.Text, Integer))
 
         MsgBox("Se ha generado el txt")
