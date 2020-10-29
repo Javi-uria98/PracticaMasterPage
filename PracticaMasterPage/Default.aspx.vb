@@ -8,7 +8,7 @@ Partial Class _Default
     Public listaNombres As New List(Of String)
     Public resto As Integer
     Public caracteres As String
-    Public listaComunidadesFichero As New List(Of String)
+    Public listaFilas As New List(Of String)
 
     Private Property Ficha As Integer
         Get
@@ -16,6 +16,15 @@ Partial Class _Default
         End Get
         Set(ByVal value As Integer)
             Me.ViewState("Ficha") = value
+        End Set
+    End Property
+
+    Private Property FichaSQL As Integer
+        Get
+            Return (CType(Me.ViewState("FichaSQL"), Integer?)).GetValueOrDefault()
+        End Get
+        Set(ByVal value As Integer)
+            Me.ViewState("FichaSQL") = value
         End Set
     End Property
 
@@ -207,4 +216,82 @@ Partial Class _Default
         End Try
     End Sub
 
+
+    Protected Sub btn_anteriorbbdd_Click(sender As Object, e As EventArgs) Handles btn_anteriorbbdd.Click
+        Dim conexion As New SqlConnection("Data Source=DESKTOP-KK3SAOI;Initial Catalog=ejercicios;User ID=ejercicios;Password=Becario2020")
+        conexion.Open()
+
+        Dim cmd As New SqlCommand("Select Nombre, Apellidos, Dni, Telefono, Comunidad, Email From tabla_formularios Where (ID = " & (Me.FichaSQL) - 1 & ")", conexion)
+        Dim dt As New DataTable
+        dt.Load(cmd.ExecuteReader)
+        Dim i As Integer = 0
+        While dt.Columns.Count > i
+            Try
+                listaFilas.Add(dt.Rows(0).Item(i).ToString().Trim())
+                Select Case i
+                    Case 0
+                        txt_nombre.Text = dt.Rows(0).Item(i).ToString().Trim()
+                    Case 1
+                        txt_apellidos.Text = dt.Rows(0).Item(i).ToString().Trim()
+                    Case 2
+                        txt_dni.Text = dt.Rows(0).Item(i).ToString().Trim()
+                    Case 3
+                        txt_telefono.Text = dt.Rows(0).Item(i).ToString().Trim()
+                    Case 4
+                        lista_comunidades.SelectedItem.Text = dt.Rows(0).Item(i).ToString().Trim()
+                    Case 5
+                        txt_email.Text = dt.Rows(0).Item(i).ToString().Trim()
+                End Select
+                i = i + 1
+            Catch ex As Exception
+                MsgBox(ex.Message)
+                Return
+            End Try
+        End While
+
+        Me.FichaSQL = Me.FichaSQL - 1
+
+        conexion.Close()
+    End Sub
+
+    Protected Sub btn_siguientebbdd_Click(sender As Object, e As EventArgs) Handles btn_siguientebbdd.Click
+        Dim conexion As New SqlConnection("Data Source=DESKTOP-KK3SAOI;Initial Catalog=ejercicios;User ID=ejercicios;Password=Becario2020")
+        conexion.Open()
+
+        Dim cmd As New SqlCommand("Select Nombre, Apellidos, Dni, Telefono, Comunidad, Email From tabla_formularios Where (ID = " & (Me.FichaSQL) + 1 & ")", conexion)
+        Dim dt As New DataTable
+        dt.Load(cmd.ExecuteReader)
+        Dim i As Integer = 0
+        While dt.Columns.Count > i
+            Try
+                listaFilas.Add(dt.Rows(0).Item(i).ToString().Trim())
+                Select Case i
+                    Case 0
+                        txt_nombre.Text = dt.Rows(0).Item(i).ToString().Trim()
+                    Case 1
+                        txt_apellidos.Text = dt.Rows(0).Item(i).ToString().Trim()
+                    Case 2
+                        txt_dni.Text = dt.Rows(0).Item(i).ToString().Trim()
+                    Case 3
+                        txt_telefono.Text = dt.Rows(0).Item(i).ToString().Trim()
+                    Case 4
+                        lista_comunidades.SelectedItem.Text = dt.Rows(0).Item(i).ToString().Trim()
+                    Case 5
+                        txt_email.Text = dt.Rows(0).Item(i).ToString().Trim()
+                End Select
+                i = i + 1
+            Catch ex As Exception
+                MsgBox("No hay más filas en la tabla de la base de datos")
+                Return
+            End Try
+        End While
+
+        Me.FichaSQL = Me.FichaSQL + 1
+
+        conexion.Close()
+    End Sub
+
+    Protected Sub btn_modificar_Click(sender As Object, e As EventArgs) Handles btn_modificar.Click
+
+    End Sub
 End Class
