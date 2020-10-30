@@ -69,6 +69,8 @@ Partial Class _Default
 
     Protected Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
 
+        calcularLetraDni(CType(txt_dni.Text, Integer))
+
         Try
             Using connection As New SqlConnection("Data Source=DESKTOP-KK3SAOI;Initial Catalog=ejercicios;User ID=ejercicios;Password=Becario2020")
                 Dim insertStatement As String = "INSERT INTO tabla_formularios (Nombre, Apellidos, Dni, Telefono, Comunidad, Email)" _
@@ -89,10 +91,6 @@ Partial Class _Default
             MsgBox("Error mientras se insertaba valores en la tabla..." & ex.Message)
         End Try
 
-        calcularLetraDni(CType(txt_dni.Text, Integer))
-
-        MsgBox("Se ha generado el txt")
-
         Using sw As StreamWriter = New StreamWriter("C:\Users\Javi\Desktop\archivoprueba2.txt", True)
             Dim nombre As String = "Nombre: " & txt_nombre.Text
             Dim apellidos As String = "Apellidos: " & txt_apellidos.Text
@@ -108,6 +106,8 @@ Partial Class _Default
             Next
             sw.WriteLine()
         End Using
+
+        MsgBox("Se ha generado el txt")
     End Sub
 
     Public Sub calcularLetraDni(ByVal dni As Integer)
@@ -127,7 +127,7 @@ Partial Class _Default
             If TypeOf ctrl Is TextBox Then
                 CType(ctrl, TextBox).Text = String.Empty
             ElseIf TypeOf ctrl Is DropDownList Then
-                CType(ctrl, DropDownList).SelectedIndex = 0
+                CType(ctrl, DropDownList).SelectedItem.Text = "Andalucía"
             ElseIf TypeOf ctrl Is Label Then
                 If ctrl Is lb_letra Then
                     lb_letra.Text = ""
@@ -292,6 +292,21 @@ Partial Class _Default
     End Sub
 
     Protected Sub btn_modificar_Click(sender As Object, e As EventArgs) Handles btn_modificar.Click
+        calcularLetraDni(CType(txt_dni.Text, Integer))
 
+        Try
+            Using connection As New SqlConnection("Data Source=DESKTOP-KK3SAOI;Initial Catalog=ejercicios;User ID=ejercicios;Password=Becario2020")
+                Dim updateStatement As String = "UPDATE tabla_formularios SET Nombre = " & "'" & txt_nombre.Text & "', Apellidos = " & "'" & txt_apellidos.Text &
+                    "', Dni = " & "'" & txt_dni.Text & lb_letra.Text & "', Telefono = " & "'" & txt_telefono.Text & "', Comunidad = " & "'" & lista_comunidades.SelectedItem.Text & "', Email = " & "'" & txt_email.Text & "' WHERE ID = " & (Me.FichaSQL) & "; "
+
+                Using insertcommand As New SqlCommand(updateStatement, connection)
+                    connection.Open()
+                    insertcommand.ExecuteNonQuery()
+                End Using
+            End Using
+
+        Catch ex As Exception
+            MsgBox("Error mientras se insertaba valores en la tabla..." & ex.Message)
+        End Try
     End Sub
 End Class
