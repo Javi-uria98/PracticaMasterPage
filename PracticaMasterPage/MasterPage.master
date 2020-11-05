@@ -31,6 +31,10 @@
             margin-right: 20px;
             margin-left: 20px;
         }
+        .boton_grid{
+            margin-left: 120px;
+  
+        }
     </style>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>

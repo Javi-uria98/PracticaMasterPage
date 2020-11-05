@@ -309,4 +309,8 @@ Partial Class _Default
             MsgBox("Error mientras se insertaba valores en la tabla..." & ex.Message)
         End Try
     End Sub
+
+    Protected Sub btn_gridview_Click(sender As Object, e As EventArgs) Handles btn_gridview.Click
+        Response.Redirect("PaginaGridView.aspx")
+    End Sub
 End Class

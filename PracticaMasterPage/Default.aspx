@@ -94,6 +94,9 @@
         <asp:Button  class="botones_abajo" ID="btn_anteriorbbdd" runat="server" Text="AnteriorBBDD" CausesValidation="false"/>
         <asp:Button ID="btn_modificar" runat="server" Text="Modificar" />
         <asp:Button class="botones_abajo" ID="btn_siguientebbdd" runat="server" Text="SiguienteBBDD" CausesValidation="false"/>
+        <br />
+        <br />
+        <asp:Button class="boton_grid" ID="btn_gridview" runat="server" Text="Grivdiew" CausesValidation="false"/>
     </asp:Panel>
 
 </asp:Content>
