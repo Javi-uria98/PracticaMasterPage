@@ -28,6 +28,41 @@ Partial Class _Default
         End Set
     End Property
 
+    Private Property Imagen As Integer
+        Get
+            Return (CType(Me.ViewState("Imagen"), Integer?)).GetValueOrDefault()
+        End Get
+        Set(value As Integer)
+            Me.ViewState("Imagen") = value
+        End Set
+    End Property
+
+    Private Property ImagenSQL As Integer
+        Get
+            Return (CType(Me.ViewState("ImagenSQL"), Integer?)).GetValueOrDefault()
+        End Get
+        Set(value As Integer)
+            Me.ViewState("ImagenSQL") = value
+        End Set
+    End Property
+
+    Private Property variableAnterior As Integer
+        Get
+            Return (CType(Me.ViewState("variableAnterior"), Integer?)).GetValueOrDefault()
+        End Get
+        Set(value As Integer)
+            Me.ViewState("variableAnterior") = value
+        End Set
+    End Property
+
+    Private Property variableAnteriorSQL As Integer
+        Get
+            Return (CType(Me.ViewState("variableAnteriorSQL"), Integer?)).GetValueOrDefault()
+        End Get
+        Set(value As Integer)
+            Me.ViewState("variableAnteriorSQL") = value
+        End Set
+    End Property
 
     Private Sub _Default_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
@@ -181,6 +216,13 @@ Partial Class _Default
     End Sub
 
     Protected Sub btn_siguiente_Click(sender As Object, e As EventArgs) Handles btn_siguiente.Click
+        If variableAnterior = 1 Then
+            Me.Imagen = Me.Imagen + 1
+            mostrarImagen(Me.Imagen)
+
+            variableAnterior = 0
+        End If
+
         Dim lineas As String() = File.ReadAllLines("C:\Users\Javi\Desktop\archivoprueba2.txt")
         Try
             txt_nombre.Text = lineas(Me.Ficha).Replace("Nombre: ", "")
@@ -190,11 +232,17 @@ Partial Class _Default
             lista_comunidades.SelectedItem.Text = lineas(Me.Ficha + 4).Replace("Comunidad: ", "")
             txt_email.Text = lineas(Me.Ficha + 5).Replace("Email: ", "")
 
+
             Me.Ficha = Me.Ficha + 7
+            If variableAnterior = 0 Then
+                mostrarImagen(Me.Imagen)
+                Me.Imagen = Me.Imagen + 1
+
+            End If
+
         Catch ex As Exception
 
         End Try
-
 
     End Sub
 
@@ -202,14 +250,28 @@ Partial Class _Default
         Dim lineas As String() = File.ReadAllLines("C:\Users\Javi\Desktop\archivoprueba2.txt")
         Try
             If (Me.Ficha > 0) Then
+
+                If variableAnterior = 0 Then
+                    Me.Imagen = Me.Imagen - 2
+                    variableAnterior = 1
+                Else
+                    Me.Imagen = Me.Imagen - 1
+                End If
+
+                If Me.Imagen < 0 Then
+                    Me.Imagen = 0
+                End If
+
                 txt_nombre.Text = lineas(Me.Ficha - 14).Replace("Nombre: ", "")
                 txt_apellidos.Text = lineas(Me.Ficha - 13).Replace("Apellidos: ", "")
                 txt_dni.Text = lineas(Me.Ficha - 12).Replace("Dni: ", "")
                 txt_telefono.Text = lineas(Me.Ficha - 11).Replace("Telefono: ", "")
                 lista_comunidades.SelectedItem.Text = lineas(Me.Ficha - 10).Replace("Comunidad: ", "")
                 txt_email.Text = lineas(Me.Ficha - 9).Replace("Email: ", "")
+                mostrarImagen(Me.Imagen)
 
                 Me.Ficha = Me.Ficha - 7
+
             End If
         Catch ex As Exception
 
@@ -249,12 +311,31 @@ Partial Class _Default
             End Try
         End While
 
+        If variableAnteriorSQL = 0 Then
+            Me.ImagenSQL = Me.ImagenSQL - 2
+            variableAnteriorSQL = 1
+        Else
+            Me.ImagenSQL = Me.ImagenSQL - 1
+        End If
+
+        If Me.ImagenSQL < 0 Then
+            Me.ImagenSQL = 0
+        End If
+        mostrarImagen(Me.ImagenSQL)
+
         Me.FichaSQL = Me.FichaSQL - 1
 
         conexion.Close()
     End Sub
 
     Protected Sub btn_siguientebbdd_Click(sender As Object, e As EventArgs) Handles btn_siguientebbdd.Click
+        If variableAnteriorSQL = 1 Then
+            Me.ImagenSQL = Me.ImagenSQL + 1
+            mostrarImagen(Me.ImagenSQL)
+
+            variableAnteriorSQL = 0
+        End If
+
         Dim conexion As New SqlConnection("Data Source=DESKTOP-KK3SAOI;Initial Catalog=ejercicios;User ID=ejercicios;Password=Becario2020")
         conexion.Open()
 
@@ -285,6 +366,11 @@ Partial Class _Default
                 Return
             End Try
         End While
+        If variableAnteriorSQL = 0 Then
+            mostrarImagen(Me.ImagenSQL)
+            Me.ImagenSQL = Me.ImagenSQL + 1
+
+        End If
 
         Me.FichaSQL = Me.FichaSQL + 1
 
@@ -313,4 +399,31 @@ Partial Class _Default
     Protected Sub btn_gridview_Click(sender As Object, e As EventArgs) Handles btn_gridview.Click
         Response.Redirect("PaginaGridView.aspx")
     End Sub
+
+    Protected Sub btn_upload_Click(sender As Object, e As EventArgs) Handles btn_upload.Click
+        If FileUpload1.HasFile Then
+            FileUpload1.SaveAs("C:\Users\Javi\source\repos\PracticaMasterPage\PracticaMasterPage\Images\" & FileUpload1.FileName)
+            LabelUpload.Text = "Archivo subido: " & FileUpload1.FileName
+        Else
+            LabelUpload.Text = "No se ha subido ningún archivo."
+        End If
+    End Sub
+
+    Protected Sub mostrarImagen(ByVal posicion As Integer)
+        Dim dirs As String() = Directory.GetFiles("C:\Users\Javi\source\repos\PracticaMasterPage\PracticaMasterPage\Images\")
+        Try
+            Dim virtualPath As String = GetVirtualPath(dirs(posicion))
+            Image2.ImageUrl = ResolveClientUrl(virtualPath)
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Public Function GetVirtualPath(ByVal physicalPath As String) As String
+        If Not physicalPath.StartsWith(HttpContext.Current.Request.PhysicalApplicationPath) Then
+            Throw New InvalidOperationException("Physical path is not within the application root")
+        End If
+
+        Return "~/" & physicalPath.Substring(HttpContext.Current.Request.PhysicalApplicationPath.Length).Replace("\", "/")
+    End Function
 End Class

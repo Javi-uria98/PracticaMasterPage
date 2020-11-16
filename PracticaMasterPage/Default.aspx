@@ -84,19 +84,30 @@
                 <td class="auto-style2">
                     <asp:Button ID="Button2" runat="server" Text="Submit" type="submit" />
                 </td>
-                <td class="auto-style2">&nbsp;</td>
+                <td class="auto-style2">
+                    <asp:Image ID="Image2" runat="server" />
+                </td>
             </tr>
         </table>
         <br />
         <asp:Button class="botones_abajo" ID="btn_anterior" runat="server" Text="Anterior" CausesValidation="false" /><asp:Button class="botones_abajo" ID="btn_listado" runat="server" Text="Listado" CausesValidation="false" Style="height: 26px" /><asp:Button class="botones_abajo" ID="btn_siguiente" runat="server" Text="Siguiente" CausesValidation="false" />
         <br />
         <br />
-        <asp:Button  class="botones_abajo" ID="btn_anteriorbbdd" runat="server" Text="AnteriorBBDD" CausesValidation="false"/>
+        <asp:Button class="botones_abajo" ID="btn_anteriorbbdd" runat="server" Text="AnteriorBBDD" CausesValidation="false" />
         <asp:Button ID="btn_modificar" runat="server" Text="Modificar" />
-        <asp:Button class="botones_abajo" ID="btn_siguientebbdd" runat="server" Text="SiguienteBBDD" CausesValidation="false"/>
+        <asp:Button class="botones_abajo" ID="btn_siguientebbdd" runat="server" Text="SiguienteBBDD" CausesValidation="false" />
         <br />
         <br />
-        <asp:Button class="boton_grid" ID="btn_gridview" runat="server" Text="Grivdiew" CausesValidation="false"/>
+        <asp:Button class="boton_grid" ID="btn_gridview" runat="server" Text="Grivdiew" CausesValidation="false" />
+        <asp:FileUpload class="botones_abajo" ID="FileUpload1" runat="server" />
+        <asp:Button ID="btn_upload" runat="server" Text="Subir foto" />
+        <asp:Label class="botones_abajo" ID="LabelUpload" runat="server"></asp:Label>
+        <asp:RegularExpressionValidator
+            ID="FileUpLoadValidator" runat="server"
+            ErrorMessage="Solo puedes subir archivos Jpeg y Gif"
+            ValidationExpression="^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w].*))(.jpg|.JPG|.gif|.GIF)$"
+            ControlToValidate="FileUpload1">  
+        </asp:RegularExpressionValidator>
     </asp:Panel>
 
 </asp:Content>
