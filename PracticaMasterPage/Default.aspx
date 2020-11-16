@@ -5,8 +5,10 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    Bienvenido: <asp:Label ID="lb_usuario" runat="server" Text=""></asp:Label>
+    <br />
     <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/pajarito.jpg" Visible="False" />
-    <asp:Panel Style="margin: 100px" ID="Panel1" runat="server" Visible="False">
+    <asp:Panel Style="margin-top: 100px; margin-left:100px; margin-right:100px;" ID="Panel1" runat="server" Visible="False">
         <asp:Label ID="Label2" runat="server" Text=""></asp:Label>
         <asp:Button Style="float: right; margin-right: 300px" ID="btn_limpiar" runat="server" Text="Limpiar" CausesValidation="false" />
         <table id="tabla" class="auto-style1">
@@ -109,6 +111,7 @@
             ControlToValidate="FileUpload1">  
         </asp:RegularExpressionValidator>
     </asp:Panel>
-
+    <br />
+    <asp:Button Style="margin-bottom:50px;" ID="btn_cerrar" runat="server" Text="Cerrar sesión" CausesValidation="false"/>
 </asp:Content>
 

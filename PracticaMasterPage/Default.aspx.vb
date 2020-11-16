@@ -66,6 +66,7 @@ Partial Class _Default
 
     Private Sub _Default_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
+            lb_usuario.Text = User.Identity.Name
 
             Me.Master.Label = Now
         End If
@@ -167,6 +168,8 @@ Partial Class _Default
                 If ctrl Is lb_letra Then
                     lb_letra.Text = ""
                 End If
+            ElseIf TypeOf ctrl Is Image Then
+                CType(ctrl, Image).Visible = False
             End If
         Next ctrl
     End Sub
@@ -410,6 +413,7 @@ Partial Class _Default
     End Sub
 
     Protected Sub mostrarImagen(ByVal posicion As Integer)
+        imagenVisible(Me)
         Dim dirs As String() = Directory.GetFiles("C:\Users\Javi\source\repos\PracticaMasterPage\PracticaMasterPage\Images\")
         Try
             Dim virtualPath As String = GetVirtualPath(dirs(posicion))
@@ -426,4 +430,19 @@ Partial Class _Default
 
         Return "~/" & physicalPath.Substring(HttpContext.Current.Request.PhysicalApplicationPath.Length).Replace("\", "/")
     End Function
+
+    Public Sub imagenVisible(ByVal root As Control)
+        For Each ctrl As Control In root.Controls
+            imagenVisible(ctrl)
+            If TypeOf ctrl Is Image Then
+                CType(ctrl, Image).Visible = True
+            End If
+        Next ctrl
+    End Sub
+
+
+    Protected Sub btn_cerrar_Click(sender As Object, e As EventArgs) Handles btn_cerrar.Click
+        FormsAuthentication.SignOut()
+        Response.Redirect("~/login.aspx")
+    End Sub
 End Class
